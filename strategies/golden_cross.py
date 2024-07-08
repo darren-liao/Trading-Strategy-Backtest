@@ -5,7 +5,6 @@ class golden_cross(bt.Strategy):
     params = (
         ('fast', 50), 
         ('slow', 200), 
-        ('order_percentage', 0.95), 
         ('ticker', 'SPY')) 
 
     def __init__(self): 
@@ -30,8 +29,7 @@ class golden_cross(bt.Strategy):
         if self.position.size == 0: #only buy if we do not already hold a position 
             if self.crossover > 0: #Golden Cross - 50 day SMA crosses above 200 day SMA 
 
-                amount_to_invest = (self.params.order_percentage * self.broker.cash)  
-                self.size = math.floor(amount_to_invest / self.data.close) 
+                self.size = math.floor(self.broker.get_cash() / self.data.close) 
 
                 print("Buy {} shares of {} at {}".format(self.size, self.params.ticker, self.data.close[0]))
                 self.buy(size = self.size) 
